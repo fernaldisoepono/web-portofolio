@@ -1,0 +1,16 @@
+body{
+    background-color:rgb(68, 68, 207)
+}
+
+.container-navbar{
+    background-color:crimson
+}
+
+.ul-navbar{
+background-color: blueviolet;
+}
+
+.li-navbar{
+border: 1px solid red;
+list-style-type: none;
+}

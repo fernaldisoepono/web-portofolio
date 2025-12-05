@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <style> 
+    /* Warna utama: hitam (#000), biru tua (#0a1a3f), ungu (#5e17eb) */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #000;
+  color: #fff;
+  line-height: 1.6;
+  scroll-behavior: smooth;
+}
+
+/* Header */
+header {
+  background: linear-gradient(to right, #0a1a3f, #5e17eb);
+  padding: 20px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* ===== Bubble Background (tanpa JS) ===== */
+:root{
+  --bg1:#0b0f1a;  /* hitam kebiruan */
+  --bg2:#1a1036;  /* ungu tua */
+}
+
+html,body{ height:100%; }
+body{
+  margin:0;
+  background: radial-gradient(1200px 700px at 80% -10%, #2d1e68 0%, transparent 60%),
+              radial-gradient(900px 600px at -10% 90%, #0a4b78 0%, transparent 60%),
+              linear-gradient(180deg, var(--bg1), var(--bg2));
+  overflow-x:hidden;
+}
+
+/* wadah bubble */
+.bubble-bg{
+  position:fixed; inset:0;
+  overflow:hidden;
+  z-index:-1;           /* pastikan di belakang konten */
+  pointer-events:none;
+  filter: saturate(120%);
+}
+
+/* bentuk & animasi bubble */
+.bubble-bg span{
+  --size: 12vmin;        /* default, akan ditimpa per bubble */
+  --left: 50%;
+  --delay: 0s;
+  --duration: 18s;
+  --scale: 1;
+
+  position:absolute;
+  left: var(--left);
+  bottom: -15vmin;       /* mulai dari bawah layar */
+  width: var(--size);
+  height: var(--size);
+  border-radius:50%;
+  opacity: .25;
+  mix-blend-mode: screen;
+
+  /* efek highlight dalam bubble */
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,.85), rgba(255,255,255,.15) 55%, rgba(255,255,255,0) 70%),
+    radial-gradient(circle at 70% 70%, rgba(91,143,255,.35), rgba(91,143,255,0) 60%);
+
+  animation: rise var(--duration) linear infinite;
+  animation-delay: var(--delay);
+  transform: translate3d(0,0,0) scale(var(--scale));
+  will-change: transform;
+}
+
+/* variasi tiap bubble */
+.bubble-bg span:nth-child(1){  --size:10vmin; --left:10%; --delay:-2s;  --duration:20s; --scale:1.1; }
+.bubble-bg span:nth-child(2){  --size:14vmin; --left:22%; --delay:-8s;  --duration:24s; --scale:1.2; }
+.bubble-bg span:nth-child(3){  --size:8vmin;  --left:35%; --delay:-4s;  --duration:18s; --scale:.9; }
+.bubble-bg span:nth-child(4){  --size:16vmin; --left:48%; --delay:-10s; --duration:26s; --scale:1.25; }
+.bubble-bg span:nth-child(5){  --size:11vmin; --left:60%; --delay:-6s;  --duration:22s; --scale:1.05; }
+.bubble-bg span:nth-child(6){  --size:9vmin;  --left:72%; --delay:-1s;  --duration:19s; --scale:.95; }
+.bubble-bg span:nth-child(7){  --size:13vmin; --left:84%; --delay:-12s; --duration:25s; --scale:1.15; }
+.bubble-bg span:nth-child(8){  --size:7vmin;  --left:5%;  --delay:-14s; --duration:17s; --scale:.85; }
+.bubble-bg span:nth-child(9){  --size:15vmin; --left:28%; --delay:-3s;  --duration:28s; --scale:1.3; }
+.bubble-bg span:nth-child(10){ --size:9vmin;  --left:53%; --delay:-16s; --duration:20s; --scale:.95; }
+.bubble-bg span:nth-child(11){ --size:12vmin; --left:67%; --delay:-5s;  --duration:23s; --scale:1.1; }
+.bubble-bg span:nth-child(12){ --size:6vmin;  --left:90%; --delay:-7s;  --duration:16s; --scale:.8; }
+
+@keyframes rise{
+  0%   { transform: translateY(0)      translateX(0)        scale(var(--scale)); }
+  50%  { transform: translateY(-55vh)  translateX(3vmin)    scale(calc(var(--scale)*1.03)); }
+  100% { transform: translateY(-115vh) translateX(-2vmin)   scale(var(--scale)); }
+}
+
+/* opsional: kurangi animasi untuk user yang prefer-reduced-motion */
+@media (prefers-reduced-motion: reduce){
+  .bubble-bg span{ animation: none; opacity:.15; }
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+header nav a {
+  color: #fff;
+  margin: 0 15px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+header nav a:hover {
+  color: #ffd700; /* efek hover warna emas */
+}
+
+/* Section umum */
+.section {
+  padding: 50px 20px;
+  text-align: center;
+}
+.section h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #5e17eb;
+}
+
+/* About Me layout */
+#about {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;           /* supaya tetap rapi di layar kecil */
+  gap: 40px;
+  text-align: left;          /* teks rata kiri */
+}
+
+#about .about-text {
+  flex: 1 1 300px;           /* lebar fleksibel minimal 300px */
+}
+
+#about .about-photo {
+  flex: 1 1 250px;           /* lebar fleksibel minimal 250px */
+  display: flex;
+  justify-content: center;
+}
+
+#about .about-photo img {
+  max-width: 300px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px #5e17eb;
+}
+
+/* Sertifikat grid */
+.certificate-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+.certificate-card {
+  background-color: #0a1a3f;
+  padding: 15px;
+  border-radius: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.certificate-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+.certificate-card p {
+  margin-top: 10px;
+  font-weight: bold;
+}
+.certificate-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 15px #5e17eb;
+}
+
+/* Kontak */
+#contact ul {
+  list-style: none;
+  padding: 0;
+}
+#contact li {
+  margin: 10px 0;
+}
+#contact a {
+  color: #5e17eb;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+#contact a:hover {
+  color: #ffd700;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 15px;
+  background-color: #0a1a3f;
+  margin-top: 50px;
+}
+
+/* Animasi muncul */
+.fade-element {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.fade-element.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Website</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <h1 class="fade-element">Fernaldi Soepono</h1>
+    <nav>
+      <a href="#about" class="fade-element">About Me</a>
+      <a href="#certificates" class="fade-element">Sertifikat</a>
+      <a href="#contact" class="fade-element">Get Contact</a>
+    </nav>
+  </header>
+
+  <!-- About Me -->
+  <section id="about" class="section fade-element">
+    <div class="about-text">
+      <h2>About Me</h2>
+      <p>
+        Halo! Saya Tuan Muda Fernaldi :)<br>
+        Saya seorang pelajar yang memiliki minat besar pada teknologi, desain UI/UX, dan pengembangan web.<br>
+        Website ini berisi informasi tentang saya, sertifikat pencapaian saya, dan cara menghubungi saya.
+      </p>
+    </div>
+    <div class="about-photo">
+      <img src="images/foto-profil.jpg" alt="Foto Fernaldi">
+    </div>
+  </section>
+
+  <!-- Sertifikat -->
+  <section id="certificates" class="section fade-element">
+    <h2>Sertifikat Saya</h2>
+    <div class="certificate-grid">
+      <!-- Ulangi blok ini untuk semua 12 sertifikat -->
+      <div class="certificate-card fade-element">
+        <img src="images/sertifikat1.jpg" alt="Sertifikat 1">
+        <p>Sertifikat Aguna Course</p>
+      </div>
+      <div class="certificate-card fade-element">
+        <img src="images/sertifikat2.jpg" alt="Sertifikat 2">
+        <p>Sertifikat Aguna Course</p>
+      </div>
+      <div class="certificate-card fade-element">
+        <img src="images/sertifikat3.jpg" alt="Sertifikat 3">
+        <p>Sertifikat 3 Aguna Course</p>
+      </div>
+      <div class="certificate-card fade-element">
+        <img src="images/sertifikat3.jpg" alt="Sertifikat 3">
+        <p>Sertifikat ID Network</p>
+      </div>
+      <!-- Tambahkan hingga 12 sertifikat -->
+    </div>
+
+  <!-- Kontak -->
+  <section id="contact" class="section fade-element">
+    <h2>Kontak Saya</h2>
+    <ul>
+      <li>Email: <a href="fernaldisoepono@smkwikrama.sch.id">fernaldisoepono@smkwikrama.sch.id</a></li>
+      <li>LinkedIn: <a href="https://linkedin.com/in/username" target="_blank">linkedin.com/in/username</a></li>
+      <li>Instagram: <a href="https://www.instagram.com/fernalldi/?hl=en" target="_blank">@fernalldi</a></li>
+    </ul>
+  </section>
+
+  <!-- Footer -->
+  <footer class="fade-element">
+    <p>&copy; 2025 Fernaldi Soepono - All Rights Reserved</p>
+  </footer>
+
+  <!-- Script untuk animasi scroll -->
+  <script>
+    const elements = document.querySelectorAll('.fade-element');
+    const showOnScroll = () => {
+      const triggerBottom = window.innerHeight * 0.85;
+      elements.forEach(el => {
+        const boxTop = el.getBoundingClientRect().top;
+        if (boxTop < triggerBottom) {
+          el.classList.add('show');
+        } else {
+          el.classList.remove('show');
+        }
+      });
+    };
+    window.addEventListener('scroll', showOnScroll);
+    window.addEventListener('load', showOnScroll);
+  </script>
+
+</body>
+</html>
